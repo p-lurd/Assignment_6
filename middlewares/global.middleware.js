@@ -50,17 +50,14 @@ const bearerTokenAuth = async (req, res, next) => {
         const token = authHeader.authorization.split(' ')[1];
         const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 
-        console.log(decoded.id)
-
-        const user = await UserModel.findOne( {_id: decoded.id});
+        const user = await UserModel.findOne({where: {id: decoded.id}})
 
         if (!user){
             return res.status(401).json({
-                message: "No user found",
+                message: "Unauthorized",
             })
         }
         req.user = user;
-        console.log(user);
         next();
     } catch (error) {
         console.log(error)

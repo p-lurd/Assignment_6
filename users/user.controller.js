@@ -1,5 +1,5 @@
 const path = require("path");
-const mongoose = require('mongoose')
+const sequelize = require('sequelize')
 const UserModel = require('../models/user'); 
 const jwt = require('jsonwebtoken');
 // const logger = require('../logger');
@@ -75,7 +75,7 @@ const login = async (req, res, next) => {
   try {
     const bodyOfRequest = req.body;
     const user = await UserModel.findOne({
-      email: bodyOfRequest.email
+      where: {email: bodyOfRequest.email}
     });
     if (!user){
       const userNotFound = new Error ("User not found");

@@ -1,16 +1,13 @@
 const express = require("express");
-const { postItem,getItems } = require("./controller");
+const path = require("path");
+const { postItem,getItems, getOneItem, updateItem, deleteItem } = require("./controller");
 const userController = require('./users/user.controller')
-const path = require('path')
-const mongoose = require ('mongoose');
+const sequelize = require('./config/sequelize');
 require ('dotenv').config();
-const db = require('./db')
 
 const app = express();
 
-db.connect();
-
-app.use(express.json());    //body parser
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 const homepagePath = path.join(__dirname, "public", "index.html");
@@ -40,12 +37,28 @@ app.post("/v1/items",globalMiddlewares.checkAdmin, postItem);
 app.get('/v1/items', getItems)
 
 
+// // ---------------To get one item----------------------
+// app.get('/v1/items/:id', getOneItem)
+
+// // -----------------To update an item---------------
+// app.patch('/v1/items/:id',globalMiddlewares.checkAdmin, updateItem);
+
+
+// // ---------------- To delete an item----------------
+// app.delete('/v1/items/:id',globalMiddlewares.checkAdmin,deleteItem);
 
 
 app.use((error, req, res, next) => {
   if (error.status == 404) return res.status(404).sendFile(notFound);
   res.status(error.status ?? 500)
   res.send(error.message)
+})
+
+
+sequelize.authenticate().then(()=>{
+  console.log('connected to DB succesfully')
+}).catch((error)=>{
+  console.log('Error connecting to DB', error) 
 })
 
 app.listen(3001, () => {

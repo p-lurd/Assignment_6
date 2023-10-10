@@ -3,8 +3,6 @@ THE API TAKES THE EMAIL, AND CHECKS THE DOMAIN, IF IT BELONGS TO US (OUR DOMAIN)
 
 
 
-NodeJS Assignment
-
 Migrations, Seeders and Authentication
 
 
@@ -38,6 +36,3 @@ Use JWT for authentication
 Ensure your JWT expires after 1 hour
 Add a .env.example file
 Ensure password is encrypted
-
-
-Submit here: submission link

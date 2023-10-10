@@ -1,32 +1,32 @@
-const mongoose = require('mongoose');
-const shortid = require('shortid');
-
-
-const Schema = mongoose.Schema;
-// const ObjectId = Schema.ObjectId;
-
-const Order = new Schema({
-  _id: {
-    type: String,
-    default: shortid.generate
-  },
-  name: { type: String, required: true },
-  status:  { 
-    type: String, 
-    required: true,
-    enum: ['pending', 'approved']
-    },
-    quantity: { type: String },
-    order_date: { type: Date, default: new Date()},
-    user_id: {
-        type: Schema.Types.ObjectId,
-        required: false,
-        ref: "user"
+'use strict';
+const {
+  Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class order extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
     }
+  }
+  order.init({
+    status: {
+      type: DataTypes.ENUM,
+      values:['pending','approved','disapproved'],
+      defaultValue:'pending'
+    },
+    quantity: DataTypes.STRING,
+    user_id: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'order',
+    timestamps: true,
+    createdAt:'created_at',
+    updatedAt:'updated_at'
   });
-
- 
-
-const OrderModel = mongoose.model('orders', Order);
-
-module.exports = ItemModel;
+  return order;
+};

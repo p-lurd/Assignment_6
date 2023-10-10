@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const sequelize = require('sequelize');
 const ItemModel = require('./models/item');
 
 
@@ -35,12 +35,14 @@ const postItem = async (req, res, next) => {
 
 }
 
-// -----------------to get list of items-------------------
+// -----------------to getb list of items-------------------
 const getItems = async (req, res, next)=>{
   try {
-    const itemsList = await ItemModel.find({}).select('name');
+    const itemsList = await ItemModel.findAll({
+      attributes: ['name']
+    });
     const itemsListArray = itemsList.map(item => item.name);
-    if(!itemsListArray){
+    if(!itemsList){
       const noItemError = new Error ("No Item Found");
       noItemError.status = 404;
       throw noItemError;
